@@ -122,16 +122,16 @@ require('lspconfig').glsl_analyzer.setup {}
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = {
-        'lua_ls',        --1
-        'clangd',        --2
-        'cmake',         --3
-        'rust_analyzer', --4
-        'gopls',         --5
-        'html',          --6
-        'htmx',          --7
-        -- 'jq',             --8
-        'tsserver',      --9
-        'cssls',         --10
+        -- 'lua_ls',        --1
+        -- 'clangd',        --2
+        -- 'cmake',         --3
+        -- 'rust_analyzer', --4
+        -- 'gopls',         --5
+        -- 'html',          --6
+        -- 'htmx',          --7
+        -- -- 'jq',             --8
+        -- 'tsserver',      --9
+        -- 'cssls',         --10
 
     },
     handlers = {
