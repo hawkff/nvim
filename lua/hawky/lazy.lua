@@ -89,8 +89,8 @@ local plugins = {
     },
 
     {
-        -- "VonHeikemen/lsp-zero.nvim",
-        -- branch = "v3.x",
+        "VonHeikemen/lsp-zero.nvim",
+        branch = "v3.x",
     },
 
     {
@@ -136,7 +136,7 @@ local plugins = {
     },
 
     {
-        "zbirenbaum/copilot.lua",
+        -- "zbirenbaum/copilot.lua",
     },
 
     {
