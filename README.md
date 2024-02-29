@@ -6,3 +6,6 @@ install npm nodejs
 install cargo
 
 install unzip
+
+alias nvim='NVIM_APPNAME=nvim_arch nvim'
+
