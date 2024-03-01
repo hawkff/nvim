@@ -1,3 +1,5 @@
+vim.opt.mouse = ""                                     -- Disable mouse support
+
 vim.opt.guicursor = ""                                 -- Set the cursor shape in GUI versions of Neovim
 
 vim.opt.nu = true                                      -- Display line numbers
