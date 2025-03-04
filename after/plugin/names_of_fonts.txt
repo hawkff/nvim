@@ -1,7 +1,0 @@
-"font-hack-nerd-font"
-"font-codicon"
-"font-dashicons"
-"font-devicons"
-"font-fontawesome"
-"font-material-icons"
-"font-symbols-only-nerd-font"
