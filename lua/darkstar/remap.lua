@@ -41,8 +41,8 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader>px", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make current file executable" })
 
 -- Edit config files (adapt paths for your lite config)
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/nvim/lua/darkstar/lazy.lua<CR>", { desc = "Edit lazy.lua file" })
-vim.keymap.set("n", "<leader>vps", "<cmd>e ~/.config/nvim/lua/darkstar/plugins/<CR>", { desc = "Plugins config folder" })
+vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.config/neovim/lua/darkstar/lazy.lua<CR>", { desc = "Edit lazy.lua file" })
+vim.keymap.set("n", "<leader>vps", "<cmd>e ~/.config/neovim/lua/darkstar/plugins<CR>", { desc = "Plugins config folder" })
 
 -- Source current file
 vim.keymap.set("n", "<leader><leader>", function()
