@@ -22,7 +22,7 @@ Optional:
 Debian/Ubuntu one-liner for the build tools:
 
 ```sh
-apt install git build-essential ripgrep && cargo install tree-sitter-cli
+apt install git build-essential ripgrep cargo && cargo install tree-sitter-cli
 ```
 
 ## Install
