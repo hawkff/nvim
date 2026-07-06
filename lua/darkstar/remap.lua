@@ -1,6 +1,5 @@
 -- Core remaps without plugin dependencies
-vim.g.mapleader = " " -- Set leader key to space
-
+-- Leader key is set in init.lua before plugins load
 ---------------------------------------------------------------------------
 -- Project explorer section
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Open File Explorer(Ex)" })
@@ -49,26 +48,17 @@ vim.keymap.set("n", "<leader><leader>", function()
     vim.cmd("so")
 end, { desc = "Source current file" })
 
--- C++ compilation
-vim.cmd([[
-  function! CompileWithClang()
-      let l:filename = expand('%:t')
-      let l:basename = expand('%:r:t')
-      execute '!' . 'clang++ --std=c++17 ' . l:filename . ' -o ' . l:basename
-  endfunction
-]])
-
-vim.api.nvim_set_keymap('n', '<leader>cl', ':call CompileWithClang()<CR>', {
-    noremap = true,
-    silent = true,
-    desc = "Compile with clang++ & c++17 "
-})
+-- Compile current file with clang++
+vim.keymap.set("n", "<leader>cl", function()
+    local filename = vim.fn.expand("%:t")
+    local basename = vim.fn.expand("%:t:r")
+    vim.cmd(string.format("!clang++ --std=c++17 %s -o %s", vim.fn.shellescape(filename), vim.fn.shellescape(basename)))
+end, { silent = true, desc = "Compile with clang++ & c++17" })
 
 -- Basic file operations
-vim.api.nvim_set_keymap('n', '<leader>w', ':w<CR>', { noremap = true, silent = true, desc = "Save current buffer" })
-vim.api.nvim_set_keymap('n', '<leader>wq', ':wq<CR>',
-    { noremap = true, silent = true, desc = "Save current buffer and quit" })
-vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>', { noremap = true, silent = true, desc = "Quit current buffer" })
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { silent = true, desc = "Save current buffer" })
+vim.keymap.set("n", "<leader>wq", "<cmd>wq<CR>", { silent = true, desc = "Save current buffer and quit" })
+vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { silent = true, desc = "Quit current buffer" })
 
 -- Delete character from file
 vim.api.nvim_create_user_command(
@@ -76,12 +66,14 @@ vim.api.nvim_create_user_command(
     function(opts)
         local char = opts.args
         if char ~= "" then
-            local escaped_char = vim.fn.escape(char, '\\')
-            vim.cmd('%s/' .. escaped_char .. '//g')
+            -- \V (very nomagic): only backslash and the / delimiter stay
+            -- special, so metachars like . * [ ] match literally
+            local escaped_char = vim.fn.escape(char, '\\/')
+            vim.cmd('%s/\\V' .. escaped_char .. '//g')
         end
     end,
     { nargs = 1 }
 )
 
 -- Delete character from file (remap)
-vim.api.nvim_set_keymap('n', '<leader>S', ':DeleteChar ', { noremap = true, desc = "Delete character from file" })
+vim.keymap.set("n", "<leader>S", ":DeleteChar ", { desc = "Delete character from file" })

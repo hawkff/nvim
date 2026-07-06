@@ -1,6 +1,5 @@
 return {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.8",
     dependencies = {
         "nvim-lua/plenary.nvim",
         -- Optional FZF native sorter - will be used if available
@@ -16,11 +15,7 @@ return {
     },
     event = "VeryLazy",
     config = function()
-        -- Fix for path_expand error
-        local has_telescope, telescope = pcall(require, "telescope")
-        if not has_telescope then
-            return
-        end
+        local telescope = require("telescope")
 
         -- Check if FZF is available
         local has_fzf = pcall(require, "telescope._extensions.fzf")
@@ -223,9 +218,5 @@ return {
         -- Diagnostics (now renamed to avoid the conflict with dropdown)
         vim.keymap.set('n', '<leader>fx', builtin.diagnostics, { desc = "Search diagnostics" })
 
-        -- Notify when FZF is active
-        if has_fzf then
-            vim.notify("Telescope: FZF native sorter is active", vim.log.levels.INFO)
-        end
     end
 }

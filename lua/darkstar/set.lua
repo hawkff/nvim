@@ -22,23 +22,21 @@ vim.opt.undofile = true                                 -- Enable persistent und
 vim.opt.hlsearch = false                                -- Disable highlighting of search matches
 vim.opt.incsearch = true                                -- Incrementally highlight as you type your search pattern
 
-vim.opt.termguicolors = true                            -- Enable true colors in terminal
-
 vim.opt.scrolloff = 8                                   -- Keep a minimum of 8 lines above/below the cursor when scrolling
 vim.opt.signcolumn = "yes"                              -- Always display the sign column
 vim.opt.isfname:append("@-@")                           -- Append specific characters to the 'isfname' option
 
-vim.opt.updatetime = 50                                 -- Set the interval for writing to the swap file
+vim.opt.updatetime = 50                                 -- Time (ms) of inactivity before CursorHold fires
 
 vim.opt.colorcolumn = ""                                -- Disable color column
 
-vim.g.mapleader = " "                                   -- Set the leader key to space
-
-vim.cmd([[autocmd BufEnter * set formatoptions-=o]])    -- Disable continuation of comments to the next line
+vim.api.nvim_create_autocmd("BufEnter", {               -- Disable continuation of comments on 'o'/'O'
+    group = vim.api.nvim_create_augroup("darkstar-formatoptions", {}),
+    callback = function()
+        vim.opt_local.formatoptions:remove("o")
+    end,
+})
 
 vim.opt.spell = true                                    -- Turn on grammar check
 
 vim.o.pumblend = 15                                     -- Transparency for the popup menu
-
--- Comment out the next line as it depends on a plugin that may not be in the lite version
--- vim.diagnostic.config{{virtual_lines=true}}         -- Diagnostics between code lines instead of at the end
