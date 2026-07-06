@@ -67,7 +67,7 @@ Leader is space. Press `<leader>?` for buffer-local bindings, or start typing an
 
 ## Structure
 
-```
+```text
 init.lua                  entry point, sets the leader key
 lua/darkstar/
   init.lua                autocmds, netrw, shada
