@@ -1,34 +1,49 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        lazy = false, -- the plugin does not support lazy-loading
         build = ":TSUpdate",
         config = function()
-            require 'nvim-treesitter.configs'.setup {
-                -- A list of parser names, or "all"
-                ensure_installed = {},
+            local ts = require("nvim-treesitter")
+            ts.setup({})
 
-                -- Install parsers synchronously (only applied to `ensure_installed`)
-                sync_install = false,
+            local group = vim.api.nvim_create_augroup("darkstar-treesitter", {})
 
-                -- Automatically install missing parsers when entering buffer
-                -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-                auto_install = true,
+            -- Start highlighting for every filetype with an installed parser.
+            -- Missing parsers are installed on demand (old auto_install = true).
+            vim.api.nvim_create_autocmd("FileType", {
+                group = group,
+                callback = function(ev)
+                    local lang = vim.treesitter.language.get_lang(ev.match)
+                    if not lang then
+                        return
+                    end
 
-                highlight = {
-                    enable = true,
+                    -- pcall: language.add can throw from the C loader on
+                    -- parser ABI mismatch (e.g. mid-:TSUpdate); it returns
+                    -- nil (not an error) when no parser exists
+                    local ok, added = pcall(vim.treesitter.language.add, lang)
+                    if ok and added then
+                        vim.treesitter.start(ev.buf, lang)
+                        return
+                    end
 
-                    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-                    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                    -- Instead of true it can also be a list of languages
-                    additional_vim_regex_highlighting = false,
-                },
-            }
-        end
+                    if not vim.tbl_contains(ts.get_available(), lang) then
+                        return
+                    end
+
+                    ts.install({ lang }):await(function(err)
+                        if err or not vim.api.nvim_buf_is_valid(ev.buf) then
+                            return
+                        end
+                        pcall(vim.treesitter.start, ev.buf, lang)
+                    end)
+                end,
+            })
+        end,
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
-    }
+    },
 }
-
-
