@@ -20,6 +20,11 @@ return {
                         return
                     end
 
+                    -- already highlighting this buffer, nothing to do
+                    if vim.treesitter.highlighter.active[ev.buf] then
+                        return
+                    end
+
                     -- pcall: language.add can throw from the C loader on
                     -- parser ABI mismatch (e.g. mid-:TSUpdate); it returns
                     -- nil (not an error) when no parser exists
@@ -37,7 +42,13 @@ return {
                         if err or not vim.api.nvim_buf_is_valid(ev.buf) then
                             return
                         end
-                        pcall(vim.treesitter.start, ev.buf, lang)
+                        -- the await callback runs off the main loop, where
+                        -- treesitter.start is restricted; defer it
+                        vim.schedule(function()
+                            if vim.api.nvim_buf_is_valid(ev.buf) then
+                                pcall(vim.treesitter.start, ev.buf, lang)
+                            end
+                        end)
                     end)
                 end,
             })

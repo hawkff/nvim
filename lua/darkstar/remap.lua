@@ -66,8 +66,10 @@ vim.api.nvim_create_user_command(
     function(opts)
         local char = opts.args
         if char ~= "" then
+            -- \V (very nomagic): only backslash and the / delimiter stay
+            -- special, so metachars like . * [ ] match literally
             local escaped_char = vim.fn.escape(char, '\\/')
-            vim.cmd('%s/' .. escaped_char .. '//g')
+            vim.cmd('%s/\\V' .. escaped_char .. '//g')
         end
     end,
     { nargs = 1 }
