@@ -9,6 +9,7 @@ return {
             ts.setup({})
 
             local group = vim.api.nvim_create_augroup("darkstar-treesitter", {})
+            local install_pending = {} -- keyed by bufnr, guards the in-flight window
 
             -- Start highlighting for every filetype with an installed parser.
             -- Missing parsers are installed on demand (old auto_install = true).
@@ -20,8 +21,9 @@ return {
                         return
                     end
 
-                    -- already highlighting this buffer, nothing to do
-                    if vim.treesitter.highlighter.active[ev.buf] then
+                    -- already highlighting, or an install is already in
+                    -- flight for this buffer, nothing to do
+                    if vim.treesitter.highlighter.active[ev.buf] or install_pending[ev.buf] then
                         return
                     end
 
@@ -38,7 +40,9 @@ return {
                         return
                     end
 
+                    install_pending[ev.buf] = true
                     ts.install({ lang }):await(function(err)
+                        install_pending[ev.buf] = nil
                         if err or not vim.api.nvim_buf_is_valid(ev.buf) then
                             return
                         end
