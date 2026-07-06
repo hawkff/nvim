@@ -3,7 +3,6 @@ return {
         "folke/which-key.nvim",
         event = "VeryLazy",
         init = function()
-            vim.o.timeout = true
             vim.o.timeoutlen = 300
         end,
         opts = {
@@ -39,9 +38,6 @@ return {
                 desc = "Buffer Local Keymaps (which-key)",
             },
         },
-        config = function()
-            --Stuff goes here duh
-        end
     }
 }
 
